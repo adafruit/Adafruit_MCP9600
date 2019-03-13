@@ -35,10 +35,11 @@ Adafruit_MCP9600::Adafruit_MCP9600() {
 
 /**************************************************************************/
 /*!
-    @brief  Setups the I2C connection and tests that the sensor was found. If so, configures for 200mA IR current and 390.625 KHz.
-    @param addr Optional I2C address (however, all chips have the same address!)
-    @param theWire Optional Wire object if your board has more than one I2C interface
-    @return true if sensor was found, false if not
+    @brief  Sets up the I2C connection and tests that the sensor was found.
+
+    @param i2c_dev  Pointer to the Adafruit_I2CDevice instance to use.
+
+    @return true if sensor was found, otherwise false.
 */
 /**************************************************************************/
 boolean Adafruit_MCP9600::begin(Adafruit_I2CDevice *i2c_dev) {
@@ -50,11 +51,11 @@ boolean Adafruit_MCP9600::begin(Adafruit_I2CDevice *i2c_dev) {
       return false;
     }
 
-    /* Check for MCP9600 device ID. */
-    Adafruit_I2CRegister reg = Adafruit_I2CRegister(_i2c_dev, 0x00);
-    uint8_t id;
-    reg.read(&id);
-    if (id != 0b11100101) {
+    /* Check for MCP9600 device ID and revision register (0x20). */
+    Adafruit_I2CRegister reg = Adafruit_I2CRegister(_i2c_dev, 0x20, 2, LSBFIRST);
+    uint16_t rev;
+    reg.read(&rev);
+    if ((uint8_t)(rev & 0xFF) != 0b01000000) {
         return false;
     }
 

@@ -3,7 +3,7 @@
 #include <Adafruit_I2CRegister.h>
 #include "Adafruit_MCP9600.h"
 
-#define I2C_ADDRESS 0x53
+#define I2C_ADDRESS (0x67)
 
 Adafruit_MCP9600 mcp;
 Adafruit_I2CDevice i2c_dev = Adafruit_I2CDevice(I2C_ADDRESS);
@@ -12,6 +12,9 @@ void
 setup()
 {
     Serial.begin(9600);
+    while (!Serial) {
+      delay(10);
+    }
     Serial.println("MCP9600 HW test");
 
     /* Initialise the driver with I2C_ADDRESS and the default I2C bus. */
@@ -29,5 +32,5 @@ void
 loop()
 {
     Serial.println("ToDo");
-    delay(100);
+    delay(1000);
 }
