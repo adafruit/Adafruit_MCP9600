@@ -26,14 +26,14 @@
 #define MCP9600_HOTJUNCTION     0x00 ///< Hot junction temperature T_H
 #define MCP9600_JUNCTIONDELTA   0x01 ///< Hot/Cold junction delta
 #define MCP9600_COLDJUNCTION    0x02 ///< Hot junction temperature T_C
-#define MCP9600_RAWDATAADC      0x03
-#define MCP9600_STATUS          0x04
-#define MCP9600_SENSORCONFIG    0x05
-#define MCP9600_DEVICECONFIG    0x06
+#define MCP9600_RAWDATAADC      0x03 ///< The 'raw' uV reading
+#define MCP9600_STATUS          0x04 ///< Current device status
+#define MCP9600_SENSORCONFIG    0x05 ///< Configuration for thermocouple type
+#define MCP9600_DEVICECONFIG    0x06 ///< Device config like sleep mode
 #define MCP9600_DEVICEID        0x20 ///< Device ID/Revision
-#define MCP9600_ALERTCONFIG_1   0x08
-#define MCP9600_ALERTHYST_1     0x0C
-#define MCP9600_ALERTLIMIT_1    0x10
+#define MCP9600_ALERTCONFIG_1   0x08 ///< The first alert's config
+#define MCP9600_ALERTHYST_1     0x0C ///< The first alert's hystersis
+#define MCP9600_ALERTLIMIT_1    0x10 ///< the first alert's limitval
   
 typedef enum _themotype {
   MCP9600_TYPE_K,
