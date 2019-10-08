@@ -6,7 +6,6 @@
 #define I2C_ADDRESS (0x67)
 
 Adafruit_MCP9600 mcp;
-Adafruit_I2CDevice i2c_dev = Adafruit_I2CDevice(I2C_ADDRESS);
 
 void setup()
 {
@@ -17,7 +16,7 @@ void setup()
     Serial.println("MCP9600 HW test");
 
     /* Initialise the driver with I2C_ADDRESS and the default I2C bus. */
-    if (! mcp.begin()) {
+    if (! mcp.begin(I2C_ADDRESS)) {
         Serial.println("Sensor not found. Check wiring!");
         while (1);
     }
