@@ -46,7 +46,7 @@ boolean Adafruit_MCP9600::begin(uint8_t i2c_addr, TwoWire *theWire) {
   i2c_dev = new Adafruit_I2CDevice(i2c_addr, theWire);
   
   /* Try to instantiate the I2C device. */
-  if (!i2c_dev->begin()) {
+  if (!i2c_dev->begin(false)) {  // *dont scan!*
     return false;
   }
   
