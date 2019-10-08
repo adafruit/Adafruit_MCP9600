@@ -34,7 +34,8 @@
 #define MCP9600_ALERTCONFIG_1   0x08 ///< The first alert's config
 #define MCP9600_ALERTHYST_1     0x0C ///< The first alert's hystersis
 #define MCP9600_ALERTLIMIT_1    0x10 ///< the first alert's limitval
-  
+
+/*! The possible Thermocouple types */
 typedef enum _themotype {
   MCP9600_TYPE_K,
   MCP9600_TYPE_J,
@@ -46,7 +47,8 @@ typedef enum _themotype {
   MCP9600_TYPE_R,
 } MCP9600_ThemocoupleType;
 
-typedef enum _resolution {
+/*! The possible ADC resolution settings */
+typedef enum _resolution {   
   MCP9600_ADCRESOLUTION_18,
   MCP9600_ADCRESOLUTION_16,
   MCP9600_ADCRESOLUTION_14,

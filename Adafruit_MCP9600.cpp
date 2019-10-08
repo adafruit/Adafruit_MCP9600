@@ -36,9 +36,9 @@ Adafruit_MCP9600::Adafruit_MCP9600() {
 /**************************************************************************/
 /*!
     @brief  Sets up the I2C connection and tests that the sensor was found.
-
-    @param i2c_dev  Pointer to the Adafruit_I2CDevice instance to use.
-
+    @param i2c_addr The I2C address of the target device, default is 0x67
+    @param theWire Pointer to an I2C device we'll use to communicate
+    default is Wire
     @return true if sensor was found, otherwise false.
 */
 /**************************************************************************/
@@ -66,6 +66,12 @@ boolean Adafruit_MCP9600::begin(uint8_t i2c_addr, TwoWire *theWire) {
 }
 
 
+/**************************************************************************/
+/*!
+    @brief  Read temperature at the end of the thermocouple
+    @return Floating point temperature in Centigrade
+*/
+/**************************************************************************/
 float Adafruit_MCP9600::readThermocouple(void) {
   if (!enabled()) {
     return NAN;
@@ -83,6 +89,12 @@ float Adafruit_MCP9600::readThermocouple(void) {
   return temp;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Read temperature at the MCP9600 chip body
+    @return Floating point temperature in Centigrade
+*/
+/**************************************************************************/
 float Adafruit_MCP9600::readAmbient(void) {
   if (!enabled()) {
     return NAN;
@@ -101,6 +113,13 @@ float Adafruit_MCP9600::readAmbient(void) {
   return temp;
 }
 
+
+/**************************************************************************/
+/*!
+    @brief  Whether to have the sensor enabled and working or in sleep mode
+    @param  flag True to be in awake mode, False for sleep mode
+*/
+/**************************************************************************/
 void Adafruit_MCP9600::enable(bool flag) {
   // define the status bits
   Adafruit_I2CRegisterBits status = 
@@ -113,6 +132,12 @@ void Adafruit_MCP9600::enable(bool flag) {
   }
 }
 
+/**************************************************************************/
+/*!
+    @brief  Whether the sensor is enabled and working or in sleep mode
+    @returns True if in awake mode, False if in sleep mode
+*/
+/**************************************************************************/
 bool Adafruit_MCP9600::enabled(void) {
   // define the status bits
   Adafruit_I2CRegisterBits status = 
@@ -121,6 +146,14 @@ bool Adafruit_MCP9600::enabled(void) {
   return !status.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired ADC resolution setter
+    @param  resolution Can be MCP9600_ADCRESOLUTION_18,
+    MCP9600_ADCRESOLUTION_16, MCP9600_ADCRESOLUTION_14,
+    or MCP9600_ADCRESOLUTION_12.
+*/
+/**************************************************************************/
 void Adafruit_MCP9600::setADCresolution(MCP9600_ADCResolution resolution) {
   // define the resolution bits
   Adafruit_I2CRegisterBits res = 
@@ -129,6 +162,14 @@ void Adafruit_MCP9600::setADCresolution(MCP9600_ADCResolution resolution) {
   res.write(resolution);
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired ADC resolution getter
+    @returns The reslution: MCP9600_ADCRESOLUTION_18,
+    MCP9600_ADCRESOLUTION_16, MCP9600_ADCRESOLUTION_14,
+    or MCP9600_ADCRESOLUTION_12.
+*/
+/**************************************************************************/
 MCP9600_ADCResolution Adafruit_MCP9600::getADCresolution(void) {
   // define the resolution bits
   Adafruit_I2CRegisterBits res = 
@@ -137,6 +178,12 @@ MCP9600_ADCResolution Adafruit_MCP9600::getADCresolution(void) {
   return (MCP9600_ADCResolution)res.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief  Read the raw ADC voltage, say for self calculating a temperature
+    @returns The 32-bit signed value from the ADC DATA register
+*/
+/**************************************************************************/
 int32_t Adafruit_MCP9600::readADC(void) {
   // define the register
   Adafruit_I2CRegister adc = 
@@ -149,7 +196,14 @@ int32_t Adafruit_MCP9600::readADC(void) {
   return reading;
 }
 
-
+/**************************************************************************/
+/*!
+    @brief  The desired thermocouple type getter
+    @returns The selected type: MCP9600_TYPE_K, MCP9600_TYPE_J,
+    MCP9600_TYPE_T, MCP9600_TYPE_N, MCP9600_TYPE_S, MCP9600_TYPE_E,
+    MCP9600_TYPE_B or MCP9600_TYPE_R
+*/
+/**************************************************************************/
 MCP9600_ThemocoupleType Adafruit_MCP9600::getThermocoupleType(void) {
   // define the register
   Adafruit_I2CRegister sensorconfig = 
@@ -160,6 +214,14 @@ MCP9600_ThemocoupleType Adafruit_MCP9600::getThermocoupleType(void) {
   return (MCP9600_ThemocoupleType)type.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired thermocouple type setter
+    @param thermotype The desired type: MCP9600_TYPE_K, MCP9600_TYPE_J,
+    MCP9600_TYPE_T, MCP9600_TYPE_N, MCP9600_TYPE_S, MCP9600_TYPE_E,
+    MCP9600_TYPE_B or MCP9600_TYPE_R
+*/
+/**************************************************************************/
 void Adafruit_MCP9600::setThermocoupleType(MCP9600_ThemocoupleType thermotype) {
   // define the register
   Adafruit_I2CRegister sensorconfig = 
@@ -170,6 +232,12 @@ void Adafruit_MCP9600::setThermocoupleType(MCP9600_ThemocoupleType thermotype) {
   type.write(thermotype);
 }
 
+/**************************************************************************/
+/*!
+    @brief   The desired filter coefficient getter
+    @returns How many readings we will be averaging, can be from 0-7
+*/
+/**************************************************************************/
 uint8_t Adafruit_MCP9600::getFilterCoefficient(void) {
   // define the register
   Adafruit_I2CRegister sensorconfig = 
@@ -180,6 +248,12 @@ uint8_t Adafruit_MCP9600::getFilterCoefficient(void) {
   return filter.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief   The desired filter coefficient setter
+    @param filtercount How many readings we will be averaging, can be from 0-7
+*/
+/**************************************************************************/
 void Adafruit_MCP9600::setFilterCoefficient(uint8_t filtercount) {
   // define the register
   Adafruit_I2CRegister sensorconfig = 
@@ -190,7 +264,13 @@ void Adafruit_MCP9600::setFilterCoefficient(uint8_t filtercount) {
   filter.write(filtercount);
 }
 
-
+/**************************************************************************/
+/*!
+    @brief  Getter for alert temperature setting
+    @param  alert Which alert output we're getting, can be 1 to 4
+    @return Floating point temperature in Centigrade
+*/
+/**************************************************************************/
 float Adafruit_MCP9600::getAlertTemperature(uint8_t alert) {
   if ((alert < 1) || (alert > 4)) 
     return NAN; // invalid
@@ -207,6 +287,13 @@ float Adafruit_MCP9600::getAlertTemperature(uint8_t alert) {
   return temp;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Setter for alert temperature setting
+    @param  alert Which alert output we're getting, can be 1 to 4
+    @param  temp  Floating point temperature in Centigrade
+*/
+/**************************************************************************/
 void Adafruit_MCP9600::setAlertTemperature(uint8_t alert, float temp) {
   if ((alert < 1) || (alert > 4)) 
     return; // invalid
@@ -219,6 +306,21 @@ void Adafruit_MCP9600::setAlertTemperature(uint8_t alert, float temp) {
   alerttemp.write(therm);
 }
 
+/**************************************************************************/
+/*!
+    @brief Configure temperature alert
+    @param alert Which alert output we're getting, can be 1 to 4
+    @param enabled Whether this alert is on or off
+    @param rising True if we want an alert when the temperature rises above.
+    False for alert on falling below.
+    @param alertColdJunction Whether the temperature we're watching is the
+    internal chip temperature (true) or the thermocouple (false). Default is
+    false
+    @param activeHigh Whether output pin goes high on alert (true) or low (false)
+    @param interruptMode Whether output pin latches on until we clear it (true)
+    or comparator mode (false)
+*/
+/**************************************************************************/
 void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising, 
 				      bool alertColdJunction,
 				      bool activeHigh, 
