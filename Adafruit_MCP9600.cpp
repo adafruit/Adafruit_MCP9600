@@ -29,18 +29,14 @@
     @brief  Instantiates a new MCP9600 class
 */
 /**************************************************************************/
-Adafruit_MCP9600::Adafruit_MCP9600() {
-  _device_id = 0x40;
-}
+Adafruit_MCP9600::Adafruit_MCP9600() { _device_id = 0x40; }
 
 /**************************************************************************/
 /*!
     @brief  Instantiates a new MCP9601 class
 */
 /**************************************************************************/
-Adafruit_MCP9601::Adafruit_MCP9601() {
-  _device_id = 0x41;
-}
+Adafruit_MCP9601::Adafruit_MCP9601() { _device_id = 0x41; }
 
 /**************************************************************************/
 /*!
@@ -53,14 +49,16 @@ Adafruit_MCP9601::Adafruit_MCP9601() {
 /**************************************************************************/
 boolean Adafruit_MCP9600::begin(uint8_t i2c_addr, TwoWire *theWire) {
   i2c_dev = new Adafruit_I2CDevice(i2c_addr, theWire);
-  
+
   /* Try to instantiate the I2C device. */
-  if (!i2c_dev->begin(false)) {  // *dont scan!*
+  if (!i2c_dev->begin(false)) { // *dont scan!*
     return false;
   }
-  
-  /* Check for MCP9600 device ID and revision register (0x20), high byte should be 0x40. */
-  Adafruit_I2CRegister id_reg = Adafruit_I2CRegister(i2c_dev, MCP9600_DEVICEID, 2, MSBFIRST);
+
+  /* Check for MCP9600 device ID and revision register (0x20), high byte should
+   * be 0x40. */
+  Adafruit_I2CRegister id_reg =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_DEVICEID, 2, MSBFIRST);
 
   if ((id_reg.read() >> 8) != _device_id) {
     return false;
@@ -74,7 +72,6 @@ boolean Adafruit_MCP9600::begin(uint8_t i2c_addr, TwoWire *theWire) {
   return true;
 }
 
-
 /**************************************************************************/
 /*!
     @brief  Read temperature at the end of the thermocouple
@@ -87,14 +84,15 @@ float Adafruit_MCP9600::readThermocouple(void) {
   }
 
   // define the register
-  Adafruit_I2CRegister therm_reg = Adafruit_I2CRegister(i2c_dev, MCP9600_HOTJUNCTION, 2, MSBFIRST);
+  Adafruit_I2CRegister therm_reg =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_HOTJUNCTION, 2, MSBFIRST);
 
   // read a signed 16 bit value
   int16_t therm = therm_reg.read();
 
   // convert to floating and shift to celsius
   float temp = therm;
-  temp *=  0.0625;  // 0.0625*C per LSB!
+  temp *= 0.0625; // 0.0625*C per LSB!
   return temp;
 }
 
@@ -110,18 +108,17 @@ float Adafruit_MCP9600::readAmbient(void) {
   }
 
   // define the register
-  Adafruit_I2CRegister cold_reg = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_COLDJUNCTION, 2, MSBFIRST);
+  Adafruit_I2CRegister cold_reg =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_COLDJUNCTION, 2, MSBFIRST);
 
   // read a signed 16 bit value
   int16_t cold = cold_reg.read();
 
   // convert to floating and shift to celsius
   float temp = cold;
-  temp *=  0.0625;  // 0.0625*C per LSB!
+  temp *= 0.0625; // 0.0625*C per LSB!
   return temp;
 }
-
 
 /**************************************************************************/
 /*!
@@ -131,8 +128,8 @@ float Adafruit_MCP9600::readAmbient(void) {
 /**************************************************************************/
 void Adafruit_MCP9600::enable(bool flag) {
   // define the status bits
-  Adafruit_I2CRegisterBits status = 
-    Adafruit_I2CRegisterBits(_config_reg, 2, 0);  // # bits, bit_shift
+  Adafruit_I2CRegisterBits status =
+      Adafruit_I2CRegisterBits(_config_reg, 2, 0); // # bits, bit_shift
 
   if (!flag) { // sleep mode
     status.write(0x01);
@@ -149,8 +146,8 @@ void Adafruit_MCP9600::enable(bool flag) {
 /**************************************************************************/
 bool Adafruit_MCP9600::enabled(void) {
   // define the status bits
-  Adafruit_I2CRegisterBits status = 
-    Adafruit_I2CRegisterBits(_config_reg, 2, 0);  // # bits, bit_shift
+  Adafruit_I2CRegisterBits status =
+      Adafruit_I2CRegisterBits(_config_reg, 2, 0); // # bits, bit_shift
 
   return !status.read();
 }
@@ -165,8 +162,8 @@ bool Adafruit_MCP9600::enabled(void) {
 /**************************************************************************/
 void Adafruit_MCP9600::setADCresolution(MCP9600_ADCResolution resolution) {
   // define the resolution bits
-  Adafruit_I2CRegisterBits res = 
-    Adafruit_I2CRegisterBits(_config_reg, 2, 5);  // # bits, bit_shift
+  Adafruit_I2CRegisterBits res =
+      Adafruit_I2CRegisterBits(_config_reg, 2, 5); // # bits, bit_shift
 
   res.write(resolution);
 }
@@ -181,8 +178,8 @@ void Adafruit_MCP9600::setADCresolution(MCP9600_ADCResolution resolution) {
 /**************************************************************************/
 MCP9600_ADCResolution Adafruit_MCP9600::getADCresolution(void) {
   // define the resolution bits
-  Adafruit_I2CRegisterBits res = 
-    Adafruit_I2CRegisterBits(_config_reg, 2, 5);  // # bits, bit_shift
+  Adafruit_I2CRegisterBits res =
+      Adafruit_I2CRegisterBits(_config_reg, 2, 5); // # bits, bit_shift
 
   return (MCP9600_ADCResolution)res.read();
 }
@@ -195,8 +192,8 @@ MCP9600_ADCResolution Adafruit_MCP9600::getADCresolution(void) {
 /**************************************************************************/
 int32_t Adafruit_MCP9600::readADC(void) {
   // define the register
-  Adafruit_I2CRegister adc = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_RAWDATAADC, 3, MSBFIRST);
+  Adafruit_I2CRegister adc =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_RAWDATAADC, 3, MSBFIRST);
   uint32_t reading = adc.read();
   // extend 24 bits to 32
   if (reading & 0x800000) {
@@ -215,10 +212,10 @@ int32_t Adafruit_MCP9600::readADC(void) {
 /**************************************************************************/
 MCP9600_ThemocoupleType Adafruit_MCP9600::getThermocoupleType(void) {
   // define the register
-  Adafruit_I2CRegister sensorconfig = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
-  Adafruit_I2CRegisterBits type = 
-    Adafruit_I2CRegisterBits(&sensorconfig, 3, 4);  // # bits, bit_shift
+  Adafruit_I2CRegister sensorconfig =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
+  Adafruit_I2CRegisterBits type =
+      Adafruit_I2CRegisterBits(&sensorconfig, 3, 4); // # bits, bit_shift
 
   return (MCP9600_ThemocoupleType)type.read();
 }
@@ -233,10 +230,10 @@ MCP9600_ThemocoupleType Adafruit_MCP9600::getThermocoupleType(void) {
 /**************************************************************************/
 void Adafruit_MCP9600::setThermocoupleType(MCP9600_ThemocoupleType thermotype) {
   // define the register
-  Adafruit_I2CRegister sensorconfig = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
-  Adafruit_I2CRegisterBits type = 
-    Adafruit_I2CRegisterBits(&sensorconfig, 3, 4);  // # bits, bit_shift
+  Adafruit_I2CRegister sensorconfig =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
+  Adafruit_I2CRegisterBits type =
+      Adafruit_I2CRegisterBits(&sensorconfig, 3, 4); // # bits, bit_shift
 
   type.write(thermotype);
 }
@@ -249,10 +246,10 @@ void Adafruit_MCP9600::setThermocoupleType(MCP9600_ThemocoupleType thermotype) {
 /**************************************************************************/
 uint8_t Adafruit_MCP9600::getFilterCoefficient(void) {
   // define the register
-  Adafruit_I2CRegister sensorconfig = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
-  Adafruit_I2CRegisterBits filter = 
-    Adafruit_I2CRegisterBits(&sensorconfig, 3, 0);  // # bits, bit_shift
+  Adafruit_I2CRegister sensorconfig =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
+  Adafruit_I2CRegisterBits filter =
+      Adafruit_I2CRegisterBits(&sensorconfig, 3, 0); // # bits, bit_shift
 
   return filter.read();
 }
@@ -265,10 +262,10 @@ uint8_t Adafruit_MCP9600::getFilterCoefficient(void) {
 /**************************************************************************/
 void Adafruit_MCP9600::setFilterCoefficient(uint8_t filtercount) {
   // define the register
-  Adafruit_I2CRegister sensorconfig = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
-  Adafruit_I2CRegisterBits filter = 
-    Adafruit_I2CRegisterBits(&sensorconfig, 3, 0);  // # bits, bit_shift
+  Adafruit_I2CRegister sensorconfig =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_SENSORCONFIG, 1, MSBFIRST);
+  Adafruit_I2CRegisterBits filter =
+      Adafruit_I2CRegisterBits(&sensorconfig, 3, 0); // # bits, bit_shift
 
   filter.write(filtercount);
 }
@@ -281,18 +278,18 @@ void Adafruit_MCP9600::setFilterCoefficient(uint8_t filtercount) {
 */
 /**************************************************************************/
 float Adafruit_MCP9600::getAlertTemperature(uint8_t alert) {
-  if ((alert < 1) || (alert > 4)) 
+  if ((alert < 1) || (alert > 4))
     return NAN; // invalid
   // define the register
-  Adafruit_I2CRegister alerttemp = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_ALERTLIMIT_1+alert-1, 2, MSBFIRST);
+  Adafruit_I2CRegister alerttemp = Adafruit_I2CRegister(
+      i2c_dev, MCP9600_ALERTLIMIT_1 + alert - 1, 2, MSBFIRST);
 
   // read a signed 16 bit value
   int16_t therm = alerttemp.read();
 
   // convert to floating and shift to celsius
   float temp = therm;
-  temp *=  0.0625;  // 0.0625*C per LSB!
+  temp *= 0.0625; // 0.0625*C per LSB!
   return temp;
 }
 
@@ -304,14 +301,14 @@ float Adafruit_MCP9600::getAlertTemperature(uint8_t alert) {
 */
 /**************************************************************************/
 void Adafruit_MCP9600::setAlertTemperature(uint8_t alert, float temp) {
-  if ((alert < 1) || (alert > 4)) 
+  if ((alert < 1) || (alert > 4))
     return; // invalid
 
   // define the register
-  Adafruit_I2CRegister alerttemp = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_ALERTLIMIT_1+alert-1, 2, MSBFIRST);
+  Adafruit_I2CRegister alerttemp = Adafruit_I2CRegister(
+      i2c_dev, MCP9600_ALERTLIMIT_1 + alert - 1, 2, MSBFIRST);
 
-  int16_t therm = temp / 0.0625;  // 0.0625*C per LSB!
+  int16_t therm = temp / 0.0625; // 0.0625*C per LSB!
   alerttemp.write(therm);
 }
 
@@ -325,20 +322,20 @@ void Adafruit_MCP9600::setAlertTemperature(uint8_t alert, float temp) {
     @param alertColdJunction Whether the temperature we're watching is the
     internal chip temperature (true) or the thermocouple (false). Default is
     false
-    @param activeHigh Whether output pin goes high on alert (true) or low (false)
+    @param activeHigh Whether output pin goes high on alert (true) or low
+   (false)
     @param interruptMode Whether output pin latches on until we clear it (true)
     or comparator mode (false)
 */
 /**************************************************************************/
-void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising, 
-				      bool alertColdJunction,
-				      bool activeHigh, 
-				      bool interruptMode) {
-  if ((alert < 1) || (alert > 4)) 
+void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
+                                      bool alertColdJunction, bool activeHigh,
+                                      bool interruptMode) {
+  if ((alert < 1) || (alert > 4))
     return; // invalid
   // define the register
-  Adafruit_I2CRegister alertconfig = 
-    Adafruit_I2CRegister(i2c_dev, MCP9600_ALERTCONFIG_1+alert-1, 1, MSBFIRST);
+  Adafruit_I2CRegister alertconfig = Adafruit_I2CRegister(
+      i2c_dev, MCP9600_ALERTCONFIG_1 + alert - 1, 1, MSBFIRST);
 
   uint8_t c = 0;
 
