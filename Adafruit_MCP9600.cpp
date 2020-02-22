@@ -7,7 +7,7 @@
   @section intro Introduction
 
   This is a library for the Adafruit MCP9600 breakout board
-  ----> http://www.adafruit.com/products/
+  ----> https://www.adafruit.com/product/4101
 
   Adafruit invests time and resources providing this open source code,
   please support Adafruit and open-source hardware by purchasing
@@ -30,7 +30,16 @@
 */
 /**************************************************************************/
 Adafruit_MCP9600::Adafruit_MCP9600() {
+  _device_id = 0x40;
+}
 
+/**************************************************************************/
+/*!
+    @brief  Instantiates a new MCP9601 class
+*/
+/**************************************************************************/
+Adafruit_MCP9601::Adafruit_MCP9601() {
+  _device_id = 0x41;
 }
 
 /**************************************************************************/
@@ -53,7 +62,7 @@ boolean Adafruit_MCP9600::begin(uint8_t i2c_addr, TwoWire *theWire) {
   /* Check for MCP9600 device ID and revision register (0x20), high byte should be 0x40. */
   Adafruit_I2CRegister id_reg = Adafruit_I2CRegister(i2c_dev, MCP9600_DEVICEID, 2, MSBFIRST);
 
-  if ((id_reg.read() & 0xFF00) != 0x4000) {
+  if ((id_reg.read() >> 8) != _device_id) {
     return false;
   }
 

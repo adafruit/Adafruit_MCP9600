@@ -65,7 +65,7 @@ typedef enum _resolution {
 class Adafruit_MCP9600 {
     public:
         Adafruit_MCP9600();
-        boolean begin(uint8_t i2c_addr = MCP9600_I2CADDR_DEFAULT, TwoWire *theWire = &Wire);;
+        boolean begin(uint8_t i2c_addr = MCP9600_I2CADDR_DEFAULT, TwoWire *theWire = &Wire);
 
 	float readThermocouple(void);
 	float readAmbient(void);
@@ -90,7 +90,19 @@ class Adafruit_MCP9600 {
 			    bool activeHigh=false, 
 			    bool interruptMode=false); 
 
+    protected:
+        uint8_t _device_id = 0; ///< The DEVICE ID high byte for MCP9600 or MCP9601
     private:
         Adafruit_I2CDevice *i2c_dev;
 	Adafruit_I2CRegister *_config_reg;
+};
+
+/**************************************************************************/
+/*!
+    @brief  MCP9601 driver.
+*/
+/**************************************************************************/
+class Adafruit_MCP9601 : public Adafruit_MCP9600 {
+ public:
+  Adafruit_MCP9601();
 };
