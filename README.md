@@ -1,4 +1,4 @@
-Adafruit_MCP9600 [![Build Status](https://github.com/adafruit/Adafruit_MCP9600/workflows/Arduino%20Library%20CI/badge.svg)(https://github.com/adafruit/Adafruit_MCP9600/actions)
+Adafruit_MCP9600 [![Build Status](https://github.com/adafruit/Adafruit_MCP9600/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_MCP9600/actions)
 ================
 
 <a href="https://www.adafruit.com/product/4226"><img src="assets/board.jpg?raw=true" width="500px"></a>
