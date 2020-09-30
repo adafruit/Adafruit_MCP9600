@@ -25,7 +25,7 @@
 
 #define MCP9600_HOTJUNCTION 0x00   ///< Hot junction temperature T_H
 #define MCP9600_JUNCTIONDELTA 0x01 ///< Hot/Cold junction delta
-#define MCP9600_COLDJUNCTION 0x02  ///< Hot junction temperature T_C
+#define MCP9600_COLDJUNCTION 0x02  ///< Cold junction temperature T_C
 #define MCP9600_RAWDATAADC 0x03    ///< The 'raw' uV reading
 #define MCP9600_STATUS 0x04        ///< Current device status
 #define MCP9600_SENSORCONFIG 0x05  ///< Configuration for thermocouple type
