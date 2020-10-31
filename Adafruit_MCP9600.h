@@ -11,8 +11,6 @@
   Adafruit invests time and resources providing this open source code,
   please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
-
-  v1.0  - First release
 */
 /**************************************************************************/
 #include <Adafruit_I2CDevice.h>
@@ -34,6 +32,14 @@
 #define MCP9600_ALERTCONFIG_1 0x08 ///< The first alert's config
 #define MCP9600_ALERTHYST_1 0x0C   ///< The first alert's hystersis
 #define MCP9600_ALERTLIMIT_1 0x10  ///< the first alert's limitval
+
+#define MCP960X_STATUS_ALERT1 0x01  ///< Bit flag for alert 1 status
+#define MCP960X_STATUS_ALERT2 0x02  ///< Bit flag for alert 2 status
+#define MCP960X_STATUS_ALERT3 0x04  ///< Bit flag for alert 3 status
+#define MCP960X_STATUS_ALERT4 0x08  ///< Bit flag for alert 4 status
+#define MCP960X_STATUS_INPUTRANGE 0x10  ///< Bit flag for input range
+#define MCP960X_STATUS_THUPDATE 0x40  ///< Bit flag for TH update
+#define MCP960X_STATUS_BURST 0x80  ///< Bit flag for burst complete
 
 /*! The possible Thermocouple types */
 typedef enum _themotype {
@@ -88,19 +94,11 @@ public:
                       bool alertColdJunction = false, bool activeHigh = false,
                       bool interruptMode = false);
 
+  uint8_t getStatus(void);
+
 protected:
   uint8_t _device_id = 0; ///< The DEVICE ID high byte for MCP9600 or MCP9601
 private:
   Adafruit_I2CDevice *i2c_dev;
   Adafruit_I2CRegister *_config_reg;
-};
-
-/**************************************************************************/
-/*!
-    @brief  MCP9601 driver.
-*/
-/**************************************************************************/
-class Adafruit_MCP9601 : public Adafruit_MCP9600 {
-public:
-  Adafruit_MCP9601();
 };

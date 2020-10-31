@@ -31,12 +31,6 @@
 /**************************************************************************/
 Adafruit_MCP9600::Adafruit_MCP9600() { _device_id = 0x40; }
 
-/**************************************************************************/
-/*!
-    @brief  Instantiates a new MCP9601 class
-*/
-/**************************************************************************/
-Adafruit_MCP9601::Adafruit_MCP9601() { _device_id = 0x41; }
 
 /**************************************************************************/
 /*!
@@ -355,4 +349,19 @@ void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
     c |= 0x10;
   }
   alertconfig.write(c);
+}
+
+
+/**************************************************************************/
+/*!
+    @brief  Getter for status register
+    @return 8-bit status, see datasheet for bits
+*/
+/**************************************************************************/
+uint8_t Adafruit_MCP9600::getStatus(void) {
+  // define the register
+  Adafruit_I2CRegister status = Adafruit_I2CRegister(
+      i2c_dev, MCP9600_STATUS, 1);
+
+  return status.read();
 }
