@@ -15,6 +15,9 @@
   v1.0  - First release
 */
 /**************************************************************************/
+#ifndef __ADAFRUIT_MCP9600_H__
+#define __ADAFRUIT_MCP9600_H__
+
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_I2CRegister.h>
 #include <Arduino.h>
@@ -104,3 +107,5 @@ class Adafruit_MCP9601 : public Adafruit_MCP9600 {
 public:
   Adafruit_MCP9601();
 };
+
+#endif
