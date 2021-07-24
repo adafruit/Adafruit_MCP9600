@@ -97,8 +97,11 @@ public:
   uint8_t getStatus(void);
 
 protected:
+  uint32_t readRegister(uint8_t reg_addr, uint8_t bytes);
+  bool writeRegister(uint8_t reg_addr, uint8_t *vals, uint8_t bytes);
+
   uint8_t _device_id = 0; ///< The DEVICE ID high byte for MCP9600 or MCP9601
 private:
   Adafruit_I2CDevice *i2c_dev;
-  Adafruit_I2CRegister *_config_reg;
+  //Adafruit_I2CRegister *_config_reg;
 };

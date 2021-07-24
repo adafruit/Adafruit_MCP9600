@@ -31,6 +31,38 @@
 /**************************************************************************/
 Adafruit_MCP9600::Adafruit_MCP9600() { _device_id = 0x40; }
 
+uint32_t Adafruit_MCP9600::readRegister(uint8_t reg_addr, uint8_t bytes) {
+  uint8_t buf[4] = {reg_addr};
+  uint32_t ret = 0;
+
+  // use STOP!
+  if (! i2c_dev->write_then_read(buf, 1, buf, bytes, true)) {
+    return ret;
+  }
+  delay(10);
+  ret = 0;
+  for (int i=0; i<bytes; i++) {
+    ret <<= 8;
+    ret |= buf[i];
+  }
+  Serial.println(ret, HEX);
+  return ret;
+}
+
+bool Adafruit_MCP9600::writeRegister(uint8_t reg_addr, uint8_t *vals, uint8_t bytes) {
+  uint8_t buf[5] = {reg_addr, 0, 0, 0, 0};
+
+  if (bytes == 2) {
+    buf[1] = vals[1];
+    buf[2] = vals[0];
+  }
+  if (bytes == 1) {
+    buf[1] = vals[0];
+  }
+
+  // use STOP!
+  return i2c_dev->write(buf, 1+bytes);
+}
 
 /**************************************************************************/
 /*!
@@ -50,17 +82,14 @@ boolean Adafruit_MCP9600::begin(uint8_t i2c_addr, TwoWire *theWire) {
   }
 
   /* Check for MCP9600 device ID and revision register (0x20), high byte should
-   * be 0x40. */
-  Adafruit_I2CRegister id_reg =
-      Adafruit_I2CRegister(i2c_dev, MCP9600_DEVICEID, 2, MSBFIRST);
-
-  if ((id_reg.read() >> 8) != _device_id) {
+   * be 0x40 or 0x41 */
+  if (readRegister(MCP9600_DEVICEID, 2) >> 8 != _device_id) {
     return false;
   }
 
   // define the config register
-  _config_reg = new Adafruit_I2CRegister(i2c_dev, MCP9600_DEVICECONFIG);
-  _config_reg->write(0x80);
+  uint8_t conf = 0x80;
+  writeRegister(MCP9600_DEVICECONFIG, &conf, 1);
   enable(true);
 
   return true;
@@ -73,16 +102,25 @@ boolean Adafruit_MCP9600::begin(uint8_t i2c_addr, TwoWire *theWire) {
 */
 /**************************************************************************/
 float Adafruit_MCP9600::readThermocouple(void) {
-  if (!enabled()) {
-    return NAN;
-  }
+
+  uint8_t status = readRegister(MCP9600_STATUS, 1);
+  status &= 0x3F; // clear top 2 bits
+  writeRegister(MCP9600_STATUS, &status, 1);
+
+  uint8_t config = readRegister(MCP9600_DEVICECONFIG, 1);
+  config &= ~0b11; // clear config mode bits
+  config |= 0b10; // set burst mode
+
+  delay(200);
+  Serial.print("midstatus: 0x");
+  Serial.println(readRegister(MCP9600_STATUS, 1), HEX);
+  delay(200);
+  Serial.print("endstatus: 0x");
+  Serial.println(readRegister(MCP9600_STATUS, 1), HEX);
 
   // define the register
-  Adafruit_I2CRegister therm_reg =
-      Adafruit_I2CRegister(i2c_dev, MCP9600_HOTJUNCTION, 2, MSBFIRST);
-
   // read a signed 16 bit value
-  int16_t therm = therm_reg.read();
+  int16_t therm = (int16_t)readRegister(MCP9600_HOTJUNCTION, 2);
 
   // convert to floating and shift to celsius
   float temp = therm;
@@ -102,12 +140,9 @@ float Adafruit_MCP9600::readAmbient(void) {
   }
 
   // define the register
-  Adafruit_I2CRegister cold_reg =
-      Adafruit_I2CRegister(i2c_dev, MCP9600_COLDJUNCTION, 2, MSBFIRST);
-
   // read a signed 16 bit value
-  int16_t cold = cold_reg.read();
-
+  int16_t cold = (int16_t)readRegister(MCP9600_COLDJUNCTION, 2);
+  
   // convert to floating and shift to celsius
   float temp = cold;
   temp *= 0.0625; // 0.0625*C per LSB!
@@ -122,14 +157,15 @@ float Adafruit_MCP9600::readAmbient(void) {
 /**************************************************************************/
 void Adafruit_MCP9600::enable(bool flag) {
   // define the status bits
-  Adafruit_I2CRegisterBits status =
-      Adafruit_I2CRegisterBits(_config_reg, 2, 0); // # bits, bit_shift
+  uint8_t status = readRegister(MCP9600_DEVICECONFIG, 1);
+  status &= ~0x03; // mask off bottom 2 bits
 
   if (!flag) { // sleep mode
-    status.write(0x01);
+    status |= 0x01;
   } else {
-    status.write(0x00);
+    status |= 0x00;
   }
+  writeRegister(MCP9600_DEVICECONFIG, &status, 1);
 }
 
 /**************************************************************************/
@@ -139,11 +175,7 @@ void Adafruit_MCP9600::enable(bool flag) {
 */
 /**************************************************************************/
 bool Adafruit_MCP9600::enabled(void) {
-  // define the status bits
-  Adafruit_I2CRegisterBits status =
-      Adafruit_I2CRegisterBits(_config_reg, 2, 0); // # bits, bit_shift
-
-  return !status.read();
+  return !(readRegister(MCP9600_DEVICECONFIG, 1) & 0x3); // mask off bottom 2 bits
 }
 
 /**************************************************************************/
@@ -155,11 +187,12 @@ bool Adafruit_MCP9600::enabled(void) {
 */
 /**************************************************************************/
 void Adafruit_MCP9600::setADCresolution(MCP9600_ADCResolution resolution) {
-  // define the resolution bits
-  Adafruit_I2CRegisterBits res =
-      Adafruit_I2CRegisterBits(_config_reg, 2, 5); // # bits, bit_shift
 
-  res.write(resolution);
+  uint8_t status = readRegister(MCP9600_DEVICECONFIG, 1);
+  status &= ~0b01100000; // mask off the 2 bits
+  status |= resolution << 5;
+  
+  writeRegister(MCP9600_DEVICECONFIG, &status, 1);
 }
 
 /**************************************************************************/
@@ -171,11 +204,7 @@ void Adafruit_MCP9600::setADCresolution(MCP9600_ADCResolution resolution) {
 */
 /**************************************************************************/
 MCP9600_ADCResolution Adafruit_MCP9600::getADCresolution(void) {
-  // define the resolution bits
-  Adafruit_I2CRegisterBits res =
-      Adafruit_I2CRegisterBits(_config_reg, 2, 5); // # bits, bit_shift
-
-  return (MCP9600_ADCResolution)res.read();
+  return (MCP9600_ADCResolution)((readRegister(MCP9600_DEVICECONFIG, 1) >> 5) & 0x3);
 }
 
 /**************************************************************************/
@@ -186,9 +215,8 @@ MCP9600_ADCResolution Adafruit_MCP9600::getADCresolution(void) {
 /**************************************************************************/
 int32_t Adafruit_MCP9600::readADC(void) {
   // define the register
-  Adafruit_I2CRegister adc =
-      Adafruit_I2CRegister(i2c_dev, MCP9600_RAWDATAADC, 3, MSBFIRST);
-  uint32_t reading = adc.read();
+  uint32_t reading = readRegister(MCP9600_RAWDATAADC, 3);
+ 
   // extend 24 bits to 32
   if (reading & 0x800000) {
     reading |= 0xFF000000;
@@ -298,12 +326,10 @@ void Adafruit_MCP9600::setAlertTemperature(uint8_t alert, float temp) {
   if ((alert < 1) || (alert > 4))
     return; // invalid
 
-  // define the register
-  Adafruit_I2CRegister alerttemp = Adafruit_I2CRegister(
-      i2c_dev, MCP9600_ALERTLIMIT_1 + alert - 1, 2, MSBFIRST);
-
   int16_t therm = temp / 0.0625; // 0.0625*C per LSB!
-  alerttemp.write(therm);
+  uint8_t buf[2] = {(uint8_t)(therm >> 8), (uint8_t)(therm & 0xFF)};
+
+  writeRegister(MCP9600_ALERTLIMIT_1 + alert - 1, buf, 2);
 }
 
 /**************************************************************************/
@@ -327,9 +353,6 @@ void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
                                       bool interruptMode) {
   if ((alert < 1) || (alert > 4))
     return; // invalid
-  // define the register
-  Adafruit_I2CRegister alertconfig = Adafruit_I2CRegister(
-      i2c_dev, MCP9600_ALERTCONFIG_1 + alert - 1, 1, MSBFIRST);
 
   uint8_t c = 0;
 
@@ -348,7 +371,8 @@ void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
   if (alertColdJunction) {
     c |= 0x10;
   }
-  alertconfig.write(c);
+
+  writeRegister(MCP9600_ALERTCONFIG_1 + alert - 1, &c, 1);
 }
 
 
@@ -359,9 +383,5 @@ void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
 */
 /**************************************************************************/
 uint8_t Adafruit_MCP9600::getStatus(void) {
-  // define the register
-  Adafruit_I2CRegister status = Adafruit_I2CRegister(
-      i2c_dev, MCP9600_STATUS, 1);
-
-  return status.read();
+  return readRegister(MCP9600_STATUS, 1);
 }
