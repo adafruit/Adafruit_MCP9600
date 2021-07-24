@@ -103,5 +103,5 @@ protected:
   uint8_t _device_id = 0; ///< The DEVICE ID high byte for MCP9600 or MCP9601
 private:
   Adafruit_I2CDevice *i2c_dev;
-  //Adafruit_I2CRegister *_config_reg;
+  Adafruit_I2CRegister *_config_reg;
 };
