@@ -33,13 +33,6 @@ Adafruit_MCP9600::Adafruit_MCP9600() { _device_id = 0x40; }
 
 /**************************************************************************/
 /*!
-    @brief  Instantiates a new MCP9601 class
-*/
-/**************************************************************************/
-Adafruit_MCP9601::Adafruit_MCP9601() { _device_id = 0x41; }
-
-/**************************************************************************/
-/*!
     @brief  Sets up the I2C connection and tests that the sensor was found.
     @param i2c_addr The I2C address of the target device, default is 0x67
     @param theWire Pointer to an I2C device we'll use to communicate
@@ -355,4 +348,18 @@ void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
     c |= 0x10;
   }
   alertconfig.write(c);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Getter for status register
+    @return 8-bit status, see datasheet for bits
+*/
+/**************************************************************************/
+uint8_t Adafruit_MCP9600::getStatus(void) {
+  // define the register
+  Adafruit_I2CRegister status =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_STATUS, 1);
+
+  return status.read();
 }
