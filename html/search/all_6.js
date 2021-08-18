@@ -13,5 +13,14 @@ var searchData=
   ['mcp9600_5frawdataadc',['MCP9600_RAWDATAADC',['../_adafruit___m_c_p9600_8h.html#aa226e93eac8e17c1288549b3175b2568',1,'Adafruit_MCP9600.h']]],
   ['mcp9600_5fsensorconfig',['MCP9600_SENSORCONFIG',['../_adafruit___m_c_p9600_8h.html#afbce9e129fe94921e622e3f2ed96d44d',1,'Adafruit_MCP9600.h']]],
   ['mcp9600_5fstatus',['MCP9600_STATUS',['../_adafruit___m_c_p9600_8h.html#a098f9d5264b09696467e74715b9676a3',1,'Adafruit_MCP9600.h']]],
-  ['mcp9600_5fthemocoupletype',['MCP9600_ThemocoupleType',['../_adafruit___m_c_p9600_8h.html#a3969a39c3a5663a00ab775be6b94a657',1,'Adafruit_MCP9600.h']]]
+  ['mcp9600_5fthemocoupletype',['MCP9600_ThemocoupleType',['../_adafruit___m_c_p9600_8h.html#a3969a39c3a5663a00ab775be6b94a657',1,'Adafruit_MCP9600.h']]],
+  ['mcp9601_5fstatus_5fopencircuit',['MCP9601_STATUS_OPENCIRCUIT',['../_adafruit___m_c_p9601_8h.html#ae70d4dbde075eb8edda13fbc2fbfd529',1,'Adafruit_MCP9601.h']]],
+  ['mcp9601_5fstatus_5fshortcircuit',['MCP9601_STATUS_SHORTCIRCUIT',['../_adafruit___m_c_p9601_8h.html#a19c35dc2e0cacaa2a0289c8f1de7e85e',1,'Adafruit_MCP9601.h']]],
+  ['mcp960x_5fstatus_5falert1',['MCP960X_STATUS_ALERT1',['../_adafruit___m_c_p9600_8h.html#afc69040310c282601018b7601d4ef710',1,'Adafruit_MCP9600.h']]],
+  ['mcp960x_5fstatus_5falert2',['MCP960X_STATUS_ALERT2',['../_adafruit___m_c_p9600_8h.html#ac3f421d26fc3c3f125b22cc9cfb1bed4',1,'Adafruit_MCP9600.h']]],
+  ['mcp960x_5fstatus_5falert3',['MCP960X_STATUS_ALERT3',['../_adafruit___m_c_p9600_8h.html#a0321069ce81b124d0a8ae8ff11f369e0',1,'Adafruit_MCP9600.h']]],
+  ['mcp960x_5fstatus_5falert4',['MCP960X_STATUS_ALERT4',['../_adafruit___m_c_p9600_8h.html#aea78e80b016ceec01ffbd393987c6be4',1,'Adafruit_MCP9600.h']]],
+  ['mcp960x_5fstatus_5fburst',['MCP960X_STATUS_BURST',['../_adafruit___m_c_p9600_8h.html#abb69a6dbe824f493bbc74a9e9a2cb485',1,'Adafruit_MCP9600.h']]],
+  ['mcp960x_5fstatus_5finputrange',['MCP960X_STATUS_INPUTRANGE',['../_adafruit___m_c_p9600_8h.html#a744af9444ef35373ffe69a037f9e75cc',1,'Adafruit_MCP9600.h']]],
+  ['mcp960x_5fstatus_5fthupdate',['MCP960X_STATUS_THUPDATE',['../_adafruit___m_c_p9600_8h.html#a1a9a8b6132ae37dc89c452e3d74b68f3',1,'Adafruit_MCP9600.h']]]
 ];
