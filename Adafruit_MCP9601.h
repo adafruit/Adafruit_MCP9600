@@ -13,6 +13,8 @@
   products from Adafruit!
 */
 /**************************************************************************/
+#ifndef __ADAFRUIT_MCP9601_H__
+#define __ADAFRUIT_MCP9601_H__
 
 #include <Adafruit_MCP9600.h>
 
@@ -29,3 +31,5 @@ class Adafruit_MCP9601 : public Adafruit_MCP9600 {
 public:
   Adafruit_MCP9601();
 };
+
+#endif // #define __ADAFRUIT_MCP9601_H__

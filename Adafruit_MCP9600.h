@@ -105,3 +105,5 @@ private:
   Adafruit_I2CDevice *i2c_dev;
   Adafruit_I2CRegister *_config_reg;
 };
+
+#endif // #define __ADAFRUIT_MCP9600_H__
