@@ -13,6 +13,9 @@
   products from Adafruit!
 */
 /**************************************************************************/
+#ifndef __ADAFRUIT_MCP9600_H__
+#define __ADAFRUIT_MCP9600_H__
+
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_I2CRegister.h>
 #include <Arduino.h>
