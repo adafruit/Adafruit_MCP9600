@@ -16,18 +16,16 @@
 
 #include <Adafruit_MCP9600.h>
 
+#define MCP9601_STATUS_OPENCIRCUIT 0x10  ///< Bit flag for open circuit
+#define MCP9601_STATUS_SHORTCIRCUIT 0x20 ///< Bit flag for short circuit
+
 /**************************************************************************/
 /*!
     @brief  MCP9601 driver.
 */
 /**************************************************************************/
 
-#define MCP9601_STATUS_OPENCIRCUIT 0x10  ///< Bit flag for open circuit
-#define MCP9601_STATUS_SHORTCIRCUIT 0x20  ///< Bit flag for short circuit
-
-
 class Adafruit_MCP9601 : public Adafruit_MCP9600 {
 public:
   Adafruit_MCP9601();
-
 };

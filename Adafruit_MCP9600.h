@@ -33,13 +33,13 @@
 #define MCP9600_ALERTHYST_1 0x0C   ///< The first alert's hystersis
 #define MCP9600_ALERTLIMIT_1 0x10  ///< the first alert's limitval
 
-#define MCP960X_STATUS_ALERT1 0x01  ///< Bit flag for alert 1 status
-#define MCP960X_STATUS_ALERT2 0x02  ///< Bit flag for alert 2 status
-#define MCP960X_STATUS_ALERT3 0x04  ///< Bit flag for alert 3 status
-#define MCP960X_STATUS_ALERT4 0x08  ///< Bit flag for alert 4 status
-#define MCP960X_STATUS_INPUTRANGE 0x10  ///< Bit flag for input range
-#define MCP960X_STATUS_THUPDATE 0x40  ///< Bit flag for TH update
-#define MCP960X_STATUS_BURST 0x80  ///< Bit flag for burst complete
+#define MCP960X_STATUS_ALERT1 0x01     ///< Bit flag for alert 1 status
+#define MCP960X_STATUS_ALERT2 0x02     ///< Bit flag for alert 2 status
+#define MCP960X_STATUS_ALERT3 0x04     ///< Bit flag for alert 3 status
+#define MCP960X_STATUS_ALERT4 0x08     ///< Bit flag for alert 4 status
+#define MCP960X_STATUS_INPUTRANGE 0x10 ///< Bit flag for input range
+#define MCP960X_STATUS_THUPDATE 0x40   ///< Bit flag for TH update
+#define MCP960X_STATUS_BURST 0x80      ///< Bit flag for burst complete
 
 /*! The possible Thermocouple types */
 typedef enum _themotype {

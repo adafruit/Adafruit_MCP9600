@@ -31,7 +31,6 @@
 /**************************************************************************/
 Adafruit_MCP9600::Adafruit_MCP9600() { _device_id = 0x40; }
 
-
 /**************************************************************************/
 /*!
     @brief  Sets up the I2C connection and tests that the sensor was found.
@@ -351,7 +350,6 @@ void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
   alertconfig.write(c);
 }
 
-
 /**************************************************************************/
 /*!
     @brief  Getter for status register
@@ -360,8 +358,8 @@ void Adafruit_MCP9600::configureAlert(uint8_t alert, bool enabled, bool rising,
 /**************************************************************************/
 uint8_t Adafruit_MCP9600::getStatus(void) {
   // define the register
-  Adafruit_I2CRegister status = Adafruit_I2CRegister(
-      i2c_dev, MCP9600_STATUS, 1);
+  Adafruit_I2CRegister status =
+      Adafruit_I2CRegister(i2c_dev, MCP9600_STATUS, 1);
 
   return status.read();
 }
