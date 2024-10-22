@@ -66,10 +66,10 @@ typedef enum _resolution {
 
 /*! The possible Ambient resolutions */
 typedef enum {
-  RES_ZERO_POINT_25 = 0b00,      // 0.25°C
-  RES_ZERO_POINT_125 = 0b01,     // 0.125°C
-  RES_ZERO_POINT_0625 = 0b10,    // 0.0625°C
-  RES_ZERO_POINT_03125 = 0b11    // 0.03125°C
+  RES_ZERO_POINT_25 = 0b00,   ///< 0.25°C
+  RES_ZERO_POINT_125 = 0b01,  ///< 0.125°C
+  RES_ZERO_POINT_0625 = 0b10, ///< 0.0625°C
+  RES_ZERO_POINT_03125 = 0b11 ///< 0.03125°C
 } Ambient_Resolution;
 
 /**************************************************************************/
