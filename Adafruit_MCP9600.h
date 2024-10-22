@@ -64,7 +64,7 @@ typedef enum _resolution {
   MCP9600_ADCRESOLUTION_12,
 } MCP9600_ADCResolution;
 
-// Add this to Adafruit_MCP9600.h
+/*! The possible Ambient resolutions */
 typedef enum {
   RES_ZERO_POINT_25 = 0b00,      // 0.25°C
   RES_ZERO_POINT_125 = 0b01,     // 0.125°C
