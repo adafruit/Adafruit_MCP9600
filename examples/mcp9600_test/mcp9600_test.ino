@@ -7,21 +7,34 @@
 
 Adafruit_MCP9600 mcp;
 
+/* Set and print ambient resolution */
+Ambient_Resolution ambientRes = RES_ZERO_POINT_0625;
+
 void setup()
 {
-    Serial.begin(115200);
-    while (!Serial) {
-      delay(10);
-    }
-    Serial.println("MCP9600 HW test");
+  Serial.begin(115200);
+  while (!Serial) {
+    delay(10);
+  }
+  Serial.println("MCP9600 HW test");
 
-    /* Initialise the driver with I2C_ADDRESS and the default I2C bus. */
-    if (! mcp.begin(I2C_ADDRESS)) {
-        Serial.println("Sensor not found. Check wiring!");
-        while (1);
-    }
+   /* Initialise the driver with I2C_ADDRESS and the default I2C bus. */
+  if (! mcp.begin(I2C_ADDRESS)) {
+    Serial.println("Sensor not found. Check wiring!");
+    while (1);
+  }
 
   Serial.println("Found MCP9600!");
+
+  /* Set and print ambient resolution */
+  mcp.setAmbientResolution(ambientRes);
+  Serial.print("Ambient Resolution set to: ");
+  switch (ambientRes) {
+    case RES_ZERO_POINT_25:    Serial.println("0.25°C"); break;
+    case RES_ZERO_POINT_125:   Serial.println("0.125°C"); break;
+    case RES_ZERO_POINT_0625:  Serial.println("0.0625°C"); break;
+    case RES_ZERO_POINT_03125: Serial.println("0.03125°C"); break;
+  }
 
   mcp.setADCresolution(MCP9600_ADCRESOLUTION_18);
   Serial.print("ADC resolution set to ");

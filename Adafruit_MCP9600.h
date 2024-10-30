@@ -64,6 +64,14 @@ typedef enum _resolution {
   MCP9600_ADCRESOLUTION_12,
 } MCP9600_ADCResolution;
 
+/*! The possible Ambient resolutions */
+typedef enum {
+  RES_ZERO_POINT_25 = 0b00,   ///< 0.25°C
+  RES_ZERO_POINT_125 = 0b01,  ///< 0.125°C
+  RES_ZERO_POINT_0625 = 0b10, ///< 0.0625°C
+  RES_ZERO_POINT_03125 = 0b11 ///< 0.03125°C
+} Ambient_Resolution;
+
 /**************************************************************************/
 /*!
     @brief  MCP9600 driver.
@@ -90,6 +98,8 @@ public:
   void setADCresolution(MCP9600_ADCResolution resolution);
   MCP9600_ADCResolution getADCresolution(void);
   int32_t readADC(void);
+
+  void setAmbientResolution(Ambient_Resolution res_value);
 
   void setAlertTemperature(uint8_t alert, float temp);
   float getAlertTemperature(uint8_t alert);

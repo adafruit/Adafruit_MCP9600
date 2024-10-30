@@ -363,3 +363,17 @@ uint8_t Adafruit_MCP9600::getStatus(void) {
 
   return status.read();
 }
+
+/**************************************************************************/
+/*!
+    @brief  Sets the resolution for ambient (cold junction) temperature readings
+    @param  res_value Ambient_Resolution enum value to set resolution
+*/
+/**************************************************************************/
+void Adafruit_MCP9600::setAmbientResolution(Ambient_Resolution res_value) {
+  uint8_t config;
+  _config_reg->read(&config, 1);        // Read the current configuration
+  config &= ~0xC0;                      // Clear existing resolution bits
+  config |= ((~res_value & 0x03) << 6); // Set inverted resolution bits
+  _config_reg->write(config);           // Write back the configuration
+}
