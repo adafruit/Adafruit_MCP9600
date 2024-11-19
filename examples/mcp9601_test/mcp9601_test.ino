@@ -4,6 +4,9 @@
 
 Adafruit_MCP9601 mcp;
 
+/* Set and print ambient resolution */
+Ambient_Resolution ambientRes = RES_ZERO_POINT_0625;
+
 void setup()
 {
     Serial.begin(115200);
@@ -19,6 +22,16 @@ void setup()
     }
 
   Serial.println("Found MCP9601!");
+
+  /* Set and print ambient resolution */
+  mcp.setAmbientResolution(ambientRes);
+  Serial.print("Ambient Resolution set to: ");
+  switch (ambientRes) {
+    case RES_ZERO_POINT_25:    Serial.println("0.25°C"); break;
+    case RES_ZERO_POINT_125:   Serial.println("0.125°C"); break;
+    case RES_ZERO_POINT_0625:  Serial.println("0.0625°C"); break;
+    case RES_ZERO_POINT_03125: Serial.println("0.03125°C"); break;
+  }
 
   mcp.setADCresolution(MCP9600_ADCRESOLUTION_18);
   Serial.print("ADC resolution set to ");
